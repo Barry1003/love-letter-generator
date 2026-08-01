@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --f-script: "Dancing Script", cursive;
+  --f-display: "Playfair Display", serif;
+  --f-body: "Lora", serif;
+  --f-monsieur: "Monsieur La Doulaise", cursive;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: var(--f-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* hide scrollbars for the clean craft look, Figma-style */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
+
+.font-script {
+  font-family: var(--f-script);
+}
+.font-display {
+  font-family: var(--f-display);
+}
+.font-body {
+  font-family: var(--f-body);
+}
+
+/* ---- Reveal / letter animations (Figma Make) ---- */
+@keyframes letter-rise {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in-left {
+  from { opacity: 0; transform: translateX(-18px); }
+  to   { opacity: 0.85; transform: translateX(0); }
+}
+@keyframes fade-in-right {
+  from { opacity: 0; transform: translateX(18px); }
+  to   { opacity: 0.85; transform: translateX(0); }
+}
+@keyframes pulse-gentle {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 1; }
+}
+
+.anim-letter-rise { animation: letter-rise 0.9s ease forwards; }
+.anim-pulse { animation: pulse-gentle 2.8s ease-in-out infinite; }
+
+/* letterpress button — sharp rectangle with a hard offset shadow */
+.letterpress {
+  border-radius: 0;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.14);
+}
+.letterpress:hover {
+  transform: translate(-1px, -2px);
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* ---- Animated default artwork ---- */
+@keyframes art-sway { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+@keyframes art-fall {
+  0% { transform: translateY(-14px) translateX(0) rotate(0); opacity: 0; }
+  12% { opacity: 1; }
+  100% { transform: translateY(200px) translateX(24px) rotate(260deg); opacity: 0; }
+}
+@keyframes art-twinkle { 0%, 100% { opacity: 0.2; transform: scale(0.7); } 50% { opacity: 1; transform: scale(1.15); } }
+@keyframes art-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+
+.art-sway { transform-box: fill-box; transform-origin: bottom center; animation: art-sway 4.5s ease-in-out infinite; }
+.art-fall { transform-box: fill-box; animation: art-fall linear infinite; }
+.art-twinkle { transform-box: fill-box; transform-origin: center; animation: art-twinkle 3s ease-in-out infinite; }
+.art-bob { transform-box: fill-box; animation: art-bob 5s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

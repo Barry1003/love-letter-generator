@@ -1,0 +1,12 @@
+node_modules
+.next
+out
+dist
+next-env.d.ts
+*.tsbuildinfo
+
+# saved love letters (runtime data)
+/data
+
+.env*
+.DS_Store
