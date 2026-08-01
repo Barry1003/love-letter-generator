@@ -20,7 +20,6 @@ function clean(input: any): NewCardInput {
     from: str(input.from, 60),
     headline: str(input.headline, 240),
     message: str(input.message, 6000),
-    from: str(input.from, 60),
     theme: input.theme,
     colors: {
       bg: str(input.colors?.bg, 32),
