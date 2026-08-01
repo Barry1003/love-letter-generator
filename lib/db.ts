@@ -13,7 +13,14 @@ const CODE_INDEX = path.join(process.cwd(), "data", "codes.json");
 
 function getSql() {
   const url = process.env.DATABASE_URL;
-  if (!url) return null;
+  if (!url) {
+    if (process.env.VERCEL || process.env.NODE_ENV === "production") {
+      throw new Error(
+        "DATABASE_URL is not set on Vercel. Please add DATABASE_URL in Vercel Settings -> Environment Variables and redeploy your project."
+      );
+    }
+    return null;
+  }
   return neon(url);
 }
 

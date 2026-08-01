@@ -60,8 +60,11 @@ export async function POST(req: NextRequest) {
 
     await saveCard(card);
     return NextResponse.json({ id: card.id, code: card.code });
-  } catch (err) {
+  } catch (err: any) {
     console.error("create card failed", err);
-    return NextResponse.json({ error: "Could not save card." }, { status: 500 });
+    return NextResponse.json(
+      { error: err?.message || "Could not save card." },
+      { status: 500 }
+    );
   }
 }
