@@ -79,8 +79,8 @@ export function LoveCardView({ card, animate = false }: { card: LoveCard; animat
         {/* body */}
         {card.message && (
           <p
-            className="font-script"
-            style={{ fontSize: 24, color: t.text, lineHeight: 1.7, margin: "0 0 32px", whiteSpace: "pre-wrap", overflowWrap: "break-word", ...anim("fade-in-up 0.6s ease 0.75s both") }}
+            className="font-body"
+            style={{ fontSize: 18, color: t.text, lineHeight: 1.85, margin: "0 0 32px", whiteSpace: "pre-wrap", overflowWrap: "break-word", ...anim("fade-in-up 0.6s ease 0.75s both") }}
           >
             {card.message}
           </p>
