@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Volume2, VolumeX, Download } from "lucide-react";
 import { LoveCard } from "@/lib/types";
 import { LoveCardView } from "./LoveCardView";
-import { CornerBotanical, WaxSeal, TwineBow } from "./CraftArt";
+import { CornerBotanical, WaxSeal, TwineBow, BrokenSeal } from "./CraftArt";
 import { SideKeepsakes, MobileKeepsakes } from "./Keepsakes";
 import { ShareRow } from "./ShareRow";
 import { playMelody, stopMelody } from "@/lib/audio";
@@ -24,7 +24,7 @@ function SongPlayer({ id }: { id: string }) {
   );
 }
 
-type EnvState = "idle" | "opening" | "open";
+type EnvState = "idle" | "opening" | "open" | "tampered";
 
 export default function Reveal({
   card,
@@ -37,8 +37,8 @@ export default function Reveal({
 }) {
   const t = card.colors;
   const tone = tonePreset(card.tone);
-  // A letter opened before opens straight to the page — it can't be resealed.
-  const [env, setEnv] = useState<EnvState>(alreadyOpened ? "open" : "idle");
+  // A letter opened before shows a "broken seal" warning first — proof it was already read.
+  const [env, setEnv] = useState<EnvState>(alreadyOpened ? "tampered" : "idle");
   const [muted, setMuted] = useState(alreadyOpened ? true : !card.music);
 
   // A real song (YouTube) when available; otherwise the built-in synth melody.
@@ -91,7 +91,37 @@ export default function Reveal({
         </button>
       )}
 
-      {env !== "open" ? (
+      {env === "tampered" ? (
+        // ---------- ALREADY OPENED (BROKEN SEAL) ----------
+        <div className="flex w-full max-w-md flex-col items-center text-center" style={{ animation: "fade-in-up 0.5s ease both" }}>
+          <div style={{ animation: "art-bob 5s ease-in-out infinite" }}>
+            <BrokenSeal fillColor={t.accent} heartColor={t.card} crackColor={t.bg} size={110} />
+          </div>
+          <div
+            className="font-body mt-5 inline-flex items-center gap-2 rounded-sm px-3 py-1"
+            style={{ background: `${t.accent}22`, color: t.accent, fontSize: 12, letterSpacing: 2, textTransform: "uppercase", fontWeight: 600 }}
+          >
+            Seal already broken
+          </div>
+          <h1 className="font-script mt-4" style={{ fontSize: 34, color: t.accent, lineHeight: 1.2 }}>
+            This letter has been opened before
+          </h1>
+          <p className="font-body mt-3" style={{ fontStyle: "italic", fontSize: 15, color: t.muted, lineHeight: 1.6 }}>
+            It was first opened on{" "}
+            <strong style={{ color: t.text }}>
+              {new Date(card.openedAt!).toLocaleString("en-US", { month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" })}
+            </strong>
+            . If that wasn&apos;t you, someone may have read it first — a sealed letter can only be opened once.
+          </p>
+          <button
+            onClick={() => setEnv("open")}
+            className="letterpress font-display mt-7 px-7 py-3"
+            style={{ background: t.accent, color: t.card, border: `2px solid ${t.gold}`, letterSpacing: 1, fontSize: 15 }}
+          >
+            Read it anyway →
+          </button>
+        </div>
+      ) : env !== "open" ? (
         // ---------- SEALED ENVELOPE ----------
         <div className="flex cursor-pointer flex-col items-center" onClick={open}>
           <div className="relative">

@@ -140,7 +140,7 @@ export default function Builder() {
   return (
     <div className="create-grid">
       {/* ---------------- FORM ---------------- */}
-      <div className="create-form-col" style={{ paddingRight: 8 }}>
+      <div className="create-form-col">
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           {/* who it's for — sets greeting, sign-off and wording */}
           <div>

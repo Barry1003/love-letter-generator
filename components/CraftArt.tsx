@@ -142,6 +142,27 @@ export function StitchedHeart({ kraft, thread, size = 96 }: { kraft: string; thr
   );
 }
 
+/** A wax seal that's been cracked open — used to signal a letter was already opened. */
+export function BrokenSeal({ fillColor, heartColor, crackColor, size = 84 }: { fillColor: string; heartColor: string; crackColor: string; size?: number }) {
+  const blob = "M40 5 C49 4 58 7 64 13 C70 19 73 27 73 36 C73 45 70 53 64 59 C58 65 49 68 40 68 C31 68 22 65 16 59 C10 53 7 45 7 36 C7 27 10 19 16 13 C22 7 31 6 40 5Z";
+  const heart = "M40 53 C30 46 19 37 19 27 C19 21 24 16 31 16 C35 16 38 18 40 21 C42 18 45 16 49 16 C56 16 61 21 61 27 C61 37 50 46 40 53Z";
+  return (
+    <svg viewBox="0 0 80 80" width={size} height={size} fill="none">
+      {/* left half, tilted */}
+      <g transform="rotate(-6 40 40)">
+        <path d={blob} fill={fillColor} opacity="0.9" clipPath="inset(0 50% 0 0)" />
+      </g>
+      {/* right half, tilted the other way + nudged */}
+      <g transform="translate(3 1) rotate(6 40 40)">
+        <path d={blob} fill={fillColor} opacity="0.9" clipPath="inset(0 0 0 50%)" />
+      </g>
+      <path d={heart} fill={heartColor} opacity="0.7" />
+      {/* jagged crack down the middle */}
+      <path d="M41 2 L35 22 L45 32 L33 46 L43 60 L37 78" stroke={crackColor} strokeWidth="4" fill="none" strokeLinejoin="round" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function TwineBow({ color = "#C49A6C", untying = false }: { color?: string; untying?: boolean }) {
   return (
     <svg

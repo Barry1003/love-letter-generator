@@ -64,6 +64,38 @@ body {
 .anim-letter-rise { animation: letter-rise 0.9s ease forwards; }
 .anim-pulse { animation: pulse-gentle 2.8s ease-in-out infinite; }
 
+/* create screen layout — generous padding, two columns on desktop */
+.create-grid {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 44px 36px 72px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 44px;
+  align-items: start;
+}
+.create-form-col {
+  background: rgba(255, 248, 238, 0.55);
+  border: 1px solid rgba(196, 168, 120, 0.5);
+  border-radius: 4px;
+  padding: 28px 26px;
+}
+@media (min-width: 960px) {
+  .create-grid {
+    grid-template-columns: 1.04fr 0.96fr;
+    padding: 52px 40px 80px;
+  }
+}
+@media (max-width: 640px) {
+  .create-grid {
+    padding: 28px 18px 56px;
+    gap: 32px;
+  }
+  .create-form-col {
+    padding: 22px 18px;
+  }
+}
+
 /* letterpress button — sharp rectangle with a hard offset shadow */
 .letterpress {
   border-radius: 0;
