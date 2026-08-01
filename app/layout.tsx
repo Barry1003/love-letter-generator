@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "For You, Always · a love letter worth keeping",
-  description: "Write a beautiful, private love letter and send it as a link that opens anywhere.",
+  title: "For You, Always · a special message worth keeping",
+  description: "Write a beautiful, private message and send it as a link that opens anywhere.",
 };
 
 const FONT_HREF =

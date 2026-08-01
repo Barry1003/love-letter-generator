@@ -2,9 +2,10 @@ import { ImageResponse } from "next/og";
 import { getCard } from "@/lib/db";
 import { THEMES, DEFAULT_THEME } from "@/lib/themes";
 import { loadFont } from "@/lib/ogFont";
+import { tonePreset } from "@/lib/tone";
 
 export const runtime = "nodejs";
-export const alt = "A sealed love letter — tap to open";
+export const alt = "A sealed message — tap to open";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -12,7 +13,9 @@ export default async function Image({ params }: { params: Promise<{ id: string }
   const { id } = await Promise.resolve(params as { id: string });
   const card = await getCard(id);
   const t = card?.colors ?? THEMES[DEFAULT_THEME].colors;
-  const name = card?.to?.trim() || "you";
+  const recipient = card?.to?.trim();
+  const displayName = recipient || "you";
+  const tone = tonePreset(card?.tone);
 
   const [script, serif] = await Promise.all([loadFont("Dancing+Script", 700), loadFont("Playfair+Display", 500)]);
   const fonts = [
@@ -54,7 +57,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
           }}
         >
           <div style={{ fontFamily: scriptFam, fontSize: 62, color: t.accent, lineHeight: 1 }}>For You, Always.</div>
-          <div style={{ fontFamily: serifFam, fontSize: 24, color: t.muted, marginTop: 10, fontStyle: "italic" }}>{`For ${name}`}</div>
+          <div style={{ fontFamily: serifFam, fontSize: 24, color: t.muted, marginTop: 10, fontStyle: "italic" }}>{`For ${displayName}`}</div>
 
           {/* kraft band + wax seal */}
           <div
@@ -85,12 +88,12 @@ export default async function Image({ params }: { params: Promise<{ id: string }
           </div>
 
           <div style={{ fontFamily: serifFam, fontSize: 20, color: t.muted, fontStyle: "italic", padding: "22px 0 26px" }}>
-            sealed with love
+            sealed for you
           </div>
         </div>
 
         <div style={{ fontFamily: scriptFam, fontSize: 40, color: t.accent, marginTop: 34 }}>
-          {`${name}, you've got a love letter`}
+          {recipient ? `${recipient}, ${tone.opener}` : tone.opener.charAt(0).toUpperCase() + tone.opener.slice(1)}
         </div>
         <div style={{ fontFamily: serifFam, fontSize: 22, color: t.muted, marginTop: 6, letterSpacing: 2 }}>TAP TO OPEN</div>
       </div>

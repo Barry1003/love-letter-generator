@@ -4,12 +4,12 @@ export const CREATOR = {
 };
 
 export const APP_NAME = "For You, Always";
-export const APP_TAGLINE = "Make a love letter worth keeping.";
+export const APP_TAGLINE = "Make a message worth keeping.";
 
 /** Suggested post/caption people can share to spread the app (credits the creator). */
 export function shareCaption() {
   return (
-    `I just made a beautiful digital love letter with “For You, Always” 💌 — ` +
+    `I just made a beautiful digital message with “For You, Always” ✨ — ` +
     `a sealed card, keepsakes and a song, all in one link. ` +
     `Built by ${CREATOR.name}. Make yours 👇`
   );

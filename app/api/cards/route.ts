@@ -32,6 +32,7 @@ function clean(input: any): NewCardInput {
       kraft: str(input.colors?.kraft, 32),
     },
     illustration: input.illustration,
+    tone: ["love", "friend", "family", "thanks"].includes(input.tone) ? input.tone : "love",
     photo: typeof input.photo === "string" ? input.photo.slice(0, 7_000_000) : undefined,
     music: Boolean(input.music),
     song: typeof input.song === "string" ? input.song.slice(0, 200) : undefined,

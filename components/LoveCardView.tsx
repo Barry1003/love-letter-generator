@@ -2,13 +2,15 @@ import { CSSProperties } from "react";
 import { LoveCard } from "@/lib/types";
 import { BotanicalSprig } from "./CraftArt";
 import { DefaultArt } from "./DefaultArt";
+import { tonePreset } from "@/lib/tone";
 
 /**
- * The love letter itself, in the Figma Make craft style.
+ * The message card itself, in the Figma Make craft style.
  * `animate` turns on the staggered entrance used on the reveal screen.
  */
 export function LoveCardView({ card, animate = false }: { card: LoveCard; animate?: boolean }) {
   const t = card.colors;
+  const tone = tonePreset(card.tone);
   const anim = (a: string): CSSProperties => (animate ? { animation: a } : {});
 
   return (
@@ -22,27 +24,25 @@ export function LoveCardView({ card, animate = false }: { card: LoveCard; animat
             <BotanicalSprig color={t.accent} side="left" w={46} h={210} />
           </div>
 
-          <div style={{ flex: 1, display: "flex", justifyContent: "center", ...anim("fade-in-up 0.6s ease 0.35s both") }}>
-            {card.photo ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={card.photo}
-                alt="a shared memory"
-                style={{
-                  width: "100%", maxWidth: 340, height: 210, objectFit: "cover",
-                  border: `3px solid ${t.gold}`, boxShadow: "3px 3px 0 rgba(0,0,0,0.13)", display: "block",
-                }}
-              />
-            ) : (
-              <div
-                style={{
-                  width: "100%", maxWidth: 340, height: 210, overflow: "hidden",
-                  border: `3px solid ${t.gold}`, boxShadow: "3px 3px 0 rgba(0,0,0,0.13)", background: t.card,
-                }}
-              >
+          <div style={{ flex: 1, minWidth: 0, display: "flex", justifyContent: "center", ...anim("fade-in-up 0.6s ease 0.35s both") }}>
+            {/* one shared frame for photo OR fallback art — clips to fit, never overflows */}
+            <div
+              style={{
+                width: "100%", maxWidth: 340, height: 210, overflow: "hidden",
+                border: `3px solid ${t.gold}`, boxShadow: "3px 3px 0 rgba(0,0,0,0.13)", background: t.card,
+              }}
+            >
+              {card.photo ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={card.photo}
+                  alt="a shared memory"
+                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                />
+              ) : (
                 <DefaultArt theme={card.theme} colors={t} />
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           <div style={anim("fade-in-right 0.7s ease 0.5s both")} className="hidden sm:block">
@@ -60,7 +60,7 @@ export function LoveCardView({ card, animate = false }: { card: LoveCard; animat
         {/* greeting */}
         {card.to && (
           <p className="font-script" style={{ fontSize: 28, color: t.muted, margin: "0 0 8px", lineHeight: 1.3, ...anim("fade-in-up 0.5s ease 0.6s both") }}>
-            My dearest {card.to},
+            {tone.greeting} {card.to},
           </p>
         )}
 
@@ -90,7 +90,7 @@ export function LoveCardView({ card, animate = false }: { card: LoveCard; animat
         <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 14, ...anim("fade-in-up 0.5s ease 0.9s both") }}>
           <div style={{ height: 1, width: 48, background: t.border }} />
           <p className="font-script" style={{ fontSize: 28, color: t.accent, margin: 0 }}>
-            {card.from?.trim() ? card.from : "with all my love ♥"}
+            {card.from?.trim() ? card.from : tone.signoff}
           </p>
         </div>
       </div>

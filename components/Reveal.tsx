@@ -10,6 +10,7 @@ import { ShareRow } from "./ShareRow";
 import { playMelody, stopMelody } from "@/lib/audio";
 import { youTubeId, DEFAULT_SONG_ID } from "@/lib/song";
 import { CREATOR } from "@/lib/creator";
+import { tonePreset } from "@/lib/tone";
 
 /** Hidden, autoplaying YouTube player — uses YouTube's licensed stream for real songs. */
 function SongPlayer({ id }: { id: string }) {
@@ -35,6 +36,7 @@ export default function Reveal({
   preview?: boolean;
 }) {
   const t = card.colors;
+  const tone = tonePreset(card.tone);
   // A letter opened before opens straight to the page — it can't be resealed.
   const [env, setEnv] = useState<EnvState>(alreadyOpened ? "open" : "idle");
   const [muted, setMuted] = useState(alreadyOpened ? true : !card.music);
@@ -154,7 +156,7 @@ export default function Reveal({
 
               <div style={{ padding: "20px 24px 34px", textAlign: "center" }}>
                 <p className="font-body" style={{ fontStyle: "italic", fontSize: 13, color: t.muted, margin: 0, opacity: 0.7 }}>
-                  sealed with love ♥
+                  sealed for you ♥
                 </p>
               </div>
             </div>
@@ -167,7 +169,7 @@ export default function Reveal({
             {env === "idle"
               ? card.to
                 ? `✦  ${card.to}, tap to open  ✦`
-                : "✦  Tap to open, my love  ✦"
+                : "✦  Tap to open  ✦"
               : "Opening…"}
           </p>
         </div>
@@ -201,7 +203,7 @@ export default function Reveal({
 
           {/* viral share + creator credit */}
           <div style={{ marginTop: 30, textAlign: "center", animation: "fade-in-up 0.5s ease 1.5s both" }}>
-            <p className="font-script" style={{ fontSize: 24, color: t.accent, marginBottom: 10 }}>Loved this? Send the love onward 💌</p>
+            <p className="font-script" style={{ fontSize: 24, color: t.accent, marginBottom: 10 }}>{tone.shareLine} 💌</p>
             <ShareRow colors={t} />
             <p className="font-body" style={{ marginTop: 16, fontSize: 11, color: t.muted, opacity: 0.85 }}>
               Made with ♥ by{" "}

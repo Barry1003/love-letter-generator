@@ -40,6 +40,14 @@ export const THEMES: Record<ThemeId, ThemeConfig> = {
       gold: "#C4A8D8", border: "#C4A8D8", muted: "#8060A0", kraft: "#B098C8",
     },
   },
+  moonlit: {
+    id: "moonlit",
+    name: "Moonlit Night",
+    colors: {
+      bg: "#0B1626", card: "#16233A", text: "#E4ECF7", accent: "#8FB3E0",
+      gold: "#CBD8EC", border: "#2C3E5C", muted: "#9FB4D4", kraft: "#3A4E70",
+    },
+  },
 };
 
 export const DEFAULT_THEME: ThemeId = "rosewood";

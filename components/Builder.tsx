@@ -1,9 +1,17 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { Image as ImageIcon, Sparkles, Copy, Check, Eye, X, Music, Trash2 } from "lucide-react";
-import { LoveCard, NewCardInput, ThemeId } from "@/lib/types";
+import { Image as ImageIcon, Sparkles, Copy, Check, Eye, X, Music, Trash2, Heart, Users, Home, Flower2 } from "lucide-react";
+import { LoveCard, NewCardInput, ThemeId, MessageTone } from "@/lib/types";
 import { THEMES, DEFAULT_THEME } from "@/lib/themes";
+import { TONES } from "@/lib/tone";
+
+const TONE_ICONS: Record<MessageTone, typeof Heart> = {
+  love: Heart,
+  friend: Users,
+  family: Home,
+  thanks: Flower2,
+};
 import { LoveCardView } from "./LoveCardView";
 import { WaxSeal } from "./CraftArt";
 import { ShareRow } from "./ShareRow";
@@ -51,6 +59,7 @@ export default function Builder() {
     theme: DEFAULT_THEME,
     colors: { ...THEMES[DEFAULT_THEME].colors },
     illustration: "heart",
+    tone: "love",
     photo: undefined,
     music: true,
     song: "",
@@ -60,7 +69,12 @@ export default function Builder() {
   const [copied, setCopied] = useState<"link" | "code" | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const t = card.colors;
+  // Fixed cream/ink palette for the FORM chrome so it stays readable no matter
+  // which theme (incl. dark ones) is chosen. The theme only styles the preview card.
+  const t = {
+    bg: "#F5E8C0", card: "#FFF8EE", text: "#3D2A1A", accent: "#7B1F2E",
+    gold: "#C9A227", border: "#C4A878", muted: "#9A6040", kraft: "#C49A6C",
+  };
   const preview = useMemo<LoveCard>(() => ({ ...card, id: "preview", code: "PREVIEW", createdAt: Date.now() }), [card]);
   const set = <K extends keyof NewCardInput>(k: K, v: NewCardInput[K]) => setCard((p) => ({ ...p, [k]: v }));
   const pickTheme = (id: ThemeId) => setCard((p) => ({ ...p, theme: id, colors: { ...THEMES[id].colors } }));
@@ -128,6 +142,32 @@ export default function Builder() {
       {/* ---------------- FORM ---------------- */}
       <div className="create-form-col" style={{ paddingRight: 8 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+          {/* who it's for — sets greeting, sign-off and wording */}
+          <div>
+            <div style={label}>WHO IS IT FOR?</div>
+            <div style={{ display: "flex", gap: 8, marginTop: 8, flexWrap: "wrap" }}>
+              {Object.values(TONES).map((tn) => {
+                const active = (card.tone ?? "love") === tn.id;
+                const Icon = TONE_ICONS[tn.id];
+                return (
+                  <button key={tn.id} type="button" onClick={() => set("tone", tn.id as MessageTone)}
+                    style={{
+                      display: "inline-flex", alignItems: "center", gap: 7,
+                      padding: "8px 14px", cursor: "pointer", fontFamily: "var(--f-body)", fontSize: 13,
+                      background: active ? t.accent : "transparent",
+                      color: active ? t.card : t.text,
+                      border: `1.5px solid ${active ? t.accent : t.border}`,
+                    }}>
+                    <Icon className="h-4 w-4" strokeWidth={1.75} /> {tn.label}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="font-body" style={{ fontSize: 11, color: t.muted, fontStyle: "italic", marginTop: 6 }}>
+              Sets the greeting (“{TONES[card.tone ?? "love"].greeting} {card.to || "…"}”) and sign-off — not just for love letters.
+            </p>
+          </div>
+
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
             <label>
               <div style={label}>TO (THEIR NAME)</div>
@@ -135,7 +175,7 @@ export default function Builder() {
             </label>
             <label>
               <div style={label}>SIGN OFF (OPTIONAL)</div>
-              <input style={inputStyle} value={card.from} maxLength={60} placeholder="with all my love ♥" onChange={(e) => set("from", e.target.value)} />
+              <input style={inputStyle} value={card.from} maxLength={60} placeholder={TONES[card.tone ?? "love"].signoff} onChange={(e) => set("from", e.target.value)} />
             </label>
           </div>
 
@@ -164,10 +204,15 @@ export default function Builder() {
                   <button key={th.id} onClick={() => pickTheme(th.id)} type="button"
                     style={{
                       display: "flex", alignItems: "center", gap: 8, padding: "8px 12px", cursor: "pointer",
-                      background: active ? th.colors.card : "transparent",
-                      border: `1.5px solid ${active ? th.colors.accent : t.border}`,
+                      background: active ? "#FBF3E4" : "transparent",
+                      boxShadow: active ? `inset 0 0 0 1px ${t.accent}` : "none",
+                      border: `1.5px solid ${active ? t.accent : t.border}`,
                     }}>
-                    <span style={{ width: 16, height: 16, background: th.colors.accent, border: `1.5px solid ${th.colors.gold}`, display: "block" }} />
+                    {/* two-tone swatch shows the theme's own colors */}
+                    <span style={{ display: "flex", width: 16, height: 16, border: `1px solid ${t.border}` }}>
+                      <span style={{ width: 8, height: 16, background: th.colors.bg, display: "block" }} />
+                      <span style={{ width: 8, height: 16, background: th.colors.accent, display: "block" }} />
+                    </span>
                     <span style={{ fontFamily: "var(--f-body)", fontSize: 13, color: t.text }}>{th.name}</span>
                   </button>
                 );
@@ -247,7 +292,7 @@ export default function Builder() {
             <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
               <WaxSeal fillColor={t.accent} heartColor={t.card} size={64} />
             </div>
-            <h2 className="font-script" style={{ fontSize: 34, color: t.accent, margin: "0 0 4px" }}>Sealed with love</h2>
+            <h2 className="font-script" style={{ fontSize: 34, color: t.accent, margin: "0 0 4px" }}>Sealed with care</h2>
             <p className="font-body" style={{ fontStyle: "italic", color: t.muted, fontSize: 14, margin: "0 0 18px" }}>
               Send this link — it opens on any phone or computer.
             </p>

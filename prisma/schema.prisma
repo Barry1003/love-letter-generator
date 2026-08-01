@@ -16,6 +16,7 @@ model Card {
   theme        String   @db.VarChar(64)
   colors       Json
   illustration String   @db.VarChar(64)
+  tone         String?  @db.VarChar(32)
   photo        String?  @db.Text
   music        Boolean  @default(false)
   song         String?  @db.VarChar(500)

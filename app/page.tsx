@@ -30,7 +30,7 @@ export default function Home() {
             For You, Always.
           </h1>
           <p className="font-body" style={{ fontStyle: "italic", fontSize: 17, color: "#7A5040", lineHeight: 1.7, margin: "0 0 22px" }}>
-            Write a letter sealed with love — then send a link that opens<br />
+            Write a special message — then send a link that opens<br />
             into a beautiful card on any phone or computer.
           </p>
 

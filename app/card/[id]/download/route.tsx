@@ -2,17 +2,19 @@ import { ImageResponse } from "next/og";
 import { getCard } from "@/lib/db";
 import { loadFont } from "@/lib/ogFont";
 import { CREATOR } from "@/lib/creator";
+import { tonePreset } from "@/lib/tone";
 
 export const runtime = "nodejs";
 
-// Server-rendered keepsake image of the letter — reliable fonts, downloadable.
+// Server-rendered keepsake image of the message — reliable fonts, downloadable.
 export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
   const card = await getCard(id);
   if (!card) return new Response("Not found", { status: 404 });
   const t = card.colors;
-  const name = card.to?.trim() || "my love";
-  const signoff = card.from?.trim() || "with all my love ♥";
+  const tone = tonePreset(card.tone);
+  const name = card.to?.trim() || "friend";
+  const signoff = card.from?.trim() || tone.signoff;
 
   const [script, serif] = await Promise.all([loadFont("Dancing+Script", 700), loadFont("Lora", 500)]);
   const fonts = [
@@ -32,7 +34,7 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
           <div style={{ display: "flex", justifyContent: "center", color: t.gold, fontSize: 26, letterSpacing: 8, marginBottom: 24 }}>
             —— ♥ ——
           </div>
-          <div style={{ fontFamily: sf, fontSize: 48, color: t.muted, marginBottom: 6 }}>{`My dearest ${name},`}</div>
+          <div style={{ fontFamily: sf, fontSize: 48, color: t.muted, marginBottom: 6 }}>{`${tone.greeting} ${name},`}</div>
           {card.headline ? (
             <div style={{ fontFamily: sf, fontSize: 44, color: t.accent, textAlign: "center", lineHeight: 1.3, margin: "10px 0 26px" }}>
               {`“${card.headline}”`}

@@ -1,6 +1,9 @@
-export type ThemeId = "rosewood" | "midnight" | "blush" | "lavender";
+export type ThemeId = "rosewood" | "midnight" | "blush" | "lavender" | "moonlit";
 
 export type IllustrationId = "heart" | "floral" | "seal" | "cherub";
+
+/** Who the message is for — drives the greeting, sign-off and wording. */
+export type MessageTone = "love" | "friend" | "family" | "thanks";
 
 /** Craft palette, matching the Figma Make design language. */
 export interface CardColors {
@@ -24,6 +27,7 @@ export interface LoveCard {
   theme: ThemeId;
   colors: CardColors; // resolved (theme defaults, possibly fine-tuned)
   illustration: IllustrationId; // fallback art when no photo
+  tone?: MessageTone; // who it's for (default: "love")
   photo?: string; // base64 data URL, optional
   music: boolean;
   song?: string; // background song — a YouTube link or id (default: Sailor Song)

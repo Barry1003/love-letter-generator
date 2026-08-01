@@ -9,7 +9,7 @@ export function DefaultArt({ theme, colors }: { theme: ThemeId; colors: CardColo
   const { accent, gold, muted } = colors;
   const common = { width: "100%", height: "100%", viewBox: "0 0 340 210", preserveAspectRatio: "xMidYMid slice", fill: "none" } as const;
 
-  if (theme === "midnight") {
+  if (theme === "midnight" || theme === "moonlit") {
     // moonlit, twinkling sky
     const stars = [
       [40, 40], [80, 70], [120, 30], [300, 120], [270, 60], [60, 130], [150, 150], [210, 40], [180, 100], [110, 110],
