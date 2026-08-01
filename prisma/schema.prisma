@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Card {
+  id           String   @id @db.VarChar(64)
+  code         String   @unique @db.VarChar(64)
+  to           String   @db.VarChar(255)
+  from         String?  @db.VarChar(255)
+  headline     String   @db.VarChar(500)
+  message      String   @db.Text
+  theme        String   @db.VarChar(64)
+  colors       Json
+  illustration String   @db.VarChar(64)
+  photo        String?  @db.Text
+  music        Boolean  @default(false)
+  song         String?  @db.VarChar(500)
+  createdAt    BigInt   @map("created_at")
+  openedAt     BigInt?  @map("opened_at")
+
+  @@map("cards")
+}
