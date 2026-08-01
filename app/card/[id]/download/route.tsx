@@ -16,13 +16,19 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
   const name = card.to?.trim() || "friend";
   const signoff = card.from?.trim() || tone.signoff;
 
-  const [script, serif] = await Promise.all([loadFont("Dancing+Script", 700), loadFont("Lora", 500)]);
+  const [script, hand, serif] = await Promise.all([
+    loadFont("Dancing+Script", 700),
+    loadFont("Caveat", 600),
+    loadFont("Lora", 500),
+  ]);
   const fonts = [
     ...(script ? [{ name: "Script", data: script, weight: 700 as const, style: "normal" as const }] : []),
+    ...(hand ? [{ name: "Hand", data: hand, weight: 600 as const, style: "normal" as const }] : []),
     ...(serif ? [{ name: "Serif", data: serif, weight: 500 as const, style: "normal" as const }] : []),
   ];
   const sf = script ? "Script" : "serif";
-  const bf = serif ? "Serif" : "serif";
+  const hf = hand ? "Hand" : serif ? "Serif" : "serif"; // handwriting for the body
+  const bf = serif ? "Serif" : "serif"; // plain serif for small footer
 
   const paragraphs = (card.message || "").split(/\n{2,}/).filter(Boolean);
 
@@ -43,7 +49,7 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
           <div style={{ height: 1, background: t.border, marginBottom: 26 }} />
           <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
             {paragraphs.map((p, i) => (
-              <div key={i} style={{ fontFamily: bf, fontSize: 30, color: t.text, lineHeight: 1.6, marginBottom: 20 }}>
+              <div key={i} style={{ fontFamily: hf, fontSize: 38, color: t.text, lineHeight: 1.5, marginBottom: 16 }}>
                 {p}
               </div>
             ))}

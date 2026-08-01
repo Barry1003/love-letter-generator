@@ -10,6 +10,7 @@ const FONT_HREF =
   "https://fonts.googleapis.com/css2?" +
   [
     "family=Dancing+Script:wght@400;600;700",
+    "family=Caveat:wght@400;500;600;700",
     "family=Playfair+Display:ital,wght@0,400;0,600;1,400",
     "family=Lora:ital,wght@0,400;0,500;1,400",
     "family=Monsieur+La+Doulaise",
